@@ -21,13 +21,15 @@ client.on("messageCreate", async msg => {
   }
 });
 
-client.on("messageCreate", async msg => {
-  if (msg.content === "s!おみくじ") {
 function GenRandomNum() {
   const min = 1;
   const max = 3;
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+client.on("messageCreate", async msg => {
+  if (msg.content === "s!おみくじ") {
+    // [TODO] 応答を行う処理を追加
   }
 });
 
