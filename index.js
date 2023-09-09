@@ -34,4 +34,4 @@ function GenRandomNum() {
 const num = GenRandomNum();
 console.log(num)
 
-client.login("MTE0OTk2NDUyMDEyNzcyNTYyOA.GWq_ga.nrna5JM3IpuIk0dfP9mrC2wUF7SepyK50tr3iY");
+client.login("orimotokairu");
