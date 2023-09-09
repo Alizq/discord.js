@@ -1,12 +1,19 @@
 //起動コマンド node index.js
 
-const { Client, GatewayIntentBits } = require("discord.js");
+const { Client, Events, Intents, Status, ActivityType } = require('discord.js');
+const { token } = require('./config.json');
+
 const client = new Client({
-  intents: Object.values(GatewayIntentBits).reduce((a, b) => a | b)
-});
+    intents: [
+		Intents.FLAGS.GUILDS,
+		Intents.FLAGS.GUILD_MESSAGES,
+		Intents.FLAGS.MESSAGE_CONTENT
+	]
+})
+
 
 client.on("ready", () => {
-  console.log(`${client.user.tag} でログインしています。`);
+  console.log(`Logged in as ${client.user.tag}!`);
 });
 
 client.on("messageCreate", async msg => {
@@ -17,23 +24,39 @@ client.on("messageCreate", async msg => {
 
 client.on("messageCreate", async msg => {
   if (msg.content === "s!ping") {
-    msg.reply("ぴんぐ！");
+    const startTime = Date.now();
+    const pingMessage = await msg.channel.send('Ping...');
+    const endTime = Date.now();
+    const ping = endTime - startTime;
+
+	pingMessage.edit(`Pong! (${ping}ms)`);
   }
 });
 
 function GenRandomNum() {
-  const min = 1;
-  const max = 3;
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+	const min = 1;
+	const max = 5;
+	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 client.on("messageCreate", async msg => {
   if (msg.content === "s!おみくじ") {
-    // [TODO] 応答を行う処理を追加
-  }
+	let number = GenRandomNum();
+	if (number == 1) {
+		msg.reply("吉")
+	}
+	if (number == 2) {
+		msg.reply("小吉")
+	}
+	if (number == 3) {
+		msg.reply("中吉")
+	}
+	if (number == 4) {
+		msg.reply("大吉")
+	}
+	if (number == 5) {
+		msg.reply("凶")
+	}
 });
 
-const num = GenRandomNum();
-console.log(num)
-
-client.login("orimotokairu");
+client.login(token);
