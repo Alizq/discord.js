@@ -1,9 +1,16 @@
 //起動コマンド node index.js
 
-const { Client, GatewayIntentBits } = require("discord.js");
+const { Client, Events, Intents, Status, ActivityType } = require('discord.js');
+const { token } = require('./config.json');
+
 const client = new Client({
-  intents: Object.values(GatewayIntentBits).reduce((a, b) => a | b)
-});
+    intents: [
+		Intents.FLAGS.GUILDS,
+		Intents.FLAGS.GUILD_MESSAGES,
+		Intents.FLAGS.MESSAGE_CONTENT
+	]
+})
+
 
 client.on("ready", () => {
   console.log(`${client.user.tag} でログインしています。`);
@@ -17,21 +24,21 @@ client.on("messageCreate", async msg => {
 
 client.on("messageCreate", async msg => {
   if (msg.content === "s!ping") {
-    msg.reply("ぴんぐ！");
+    msg.reply("でゅあうん！");
   }
 });
+
+function GenRandomNum() {
+	const min = 1;
+	const max = 3;
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
 client.on("messageCreate", async msg => {
   if (msg.content === "s!おみくじ") {
-function GenRandomNum() {
-  const min = 1;
-  const max = 3;
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+	let num = GenRandomNum();
+	msg.reply(num)
   }
 });
 
-const num = GenRandomNum();
-console.log(num)
-
-client.login("orimotokairu");
+client.login(token);
