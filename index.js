@@ -57,6 +57,7 @@ client.on("messageCreate", async msg => {
 	if (number == 5) {
 		msg.reply("凶")
 	}
+  }
 });
 
 client.login(token);
