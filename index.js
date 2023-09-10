@@ -2,6 +2,7 @@
 
 const { Client, Events, Intents, Status, ActivityType } = require('discord.js');
 const { token } = require('./config.json');
+const options = require('./options.json');
 
 const client = new Client({
   intents: [
@@ -33,30 +34,25 @@ client.on("messageCreate", async msg => {
   }
 });
 
-function GenRandomNum() {
-  const min = 1;
-  const max = 5;
+function GenRandomNum(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// omikujiMapping という配列の中に options.omikuji.chances のキーを値の数だけ入れる。
+// 例:
+//   options.omikuji.chances = {"大吉": 2, "吉": 3, "凶": 1}
+//     ↓
+//   omikujiMapping = ["大吉", "大吉", "吉", "吉", "吉", "凶"]
+const omikujiMapping = [];
+for (let [key, value] of Object.entries(options.omikuji.chances)) {
+  omikujiMapping.push(...Array(value).fill(key));
 }
 
 client.on("messageCreate", async msg => {
   if (msg.content === "s!おみくじ") {
-    let number = GenRandomNum();
-    if (number == 1) {
-      msg.reply("吉")
-    }
-    if (number == 2) {
-      msg.reply("小吉")
-    }
-    if (number == 3) {
-      msg.reply("中吉")
-    }
-    if (number == 4) {
-      msg.reply("大吉")
-    }
-    if (number == 5) {
-      msg.reply("凶")
-    }
+    // omikujiMapping からランダムな要素を返す。
+    let number = GenRandomNum(1, omikujiMapping.length);
+    msg.reply(omikujiMapping[number - 1]);
   }
 });
 
