@@ -56,4 +56,10 @@ client.on("messageCreate", async msg => {
   }
 });
 
+client.on("messageCreate", async msg => {
+  if (msg.content === "s!test") {
+    msg.reply("Test");
+  }
+});
+
 client.login(token);
