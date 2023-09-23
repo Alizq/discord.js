@@ -38,15 +38,25 @@ function GenRandomNum(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// 配列の中に table のキーを値の数だけ入れる。
+// 例:
+//   {"大吉": 2, "吉": 3, "凶": 1}
+//     ↓
+//   ["大吉", "大吉", "吉", "吉", "吉", "凶"]
+function CreateMapping(table) {
+  const mapping = [];
+  for (let [key, value] of Object.entries(table)) {
+    mapping.push(...Array(value).fill(key));
+  }
+  return mapping;
+}
+
 // omikujiMapping という配列の中に options.omikuji.chances のキーを値の数だけ入れる。
 // 例:
 //   options.omikuji.chances = {"大吉": 2, "吉": 3, "凶": 1}
 //     ↓
 //   omikujiMapping = ["大吉", "大吉", "吉", "吉", "吉", "凶"]
-const omikujiMapping = [];
-for (let [key, value] of Object.entries(options.omikuji.chances)) {
-  omikujiMapping.push(...Array(value).fill(key));
-}
+const omikujiMapping = CreateMapping(options.omikuji.chances);
 
 client.on("messageCreate", async msg => {
   if (msg.content === "s!おみくじ") {
@@ -55,5 +65,17 @@ client.on("messageCreate", async msg => {
     msg.reply(omikujiMapping[number - 1]);
   }
 });
+
+const golcondaMapping = CreateMapping(options.golconda.replyChances);
+
+client.on("messageCreate", async msg => {
+  if (!msg.author.bot && !msg.content.startsWith("s!")) {
+    const number = GenRandomNum(1, golcondaMapping.length);
+    const reply = golcondaMapping[number - 1];
+    if (reply != "") {
+      msg.channel.send(reply);
+    }
+  }
+})
 
 client.login(token);
