@@ -66,4 +66,16 @@ client.on("messageCreate", async msg => {
   }
 });
 
+const golcondaMapping = CreateMapping(options.golconda.replyChances);
+
+client.on("messageCreate", async msg => {
+  if (!msg.author.bot && !msg.content.startsWith("s!")) {
+    const number = GenRandomNum(1, golcondaMapping.length);
+    const reply = golcondaMapping(golcondaMapping[number - 1]);
+    if (reply != "") {
+      msg.channel.send(reply);
+    }
+  }
+})
+
 client.login(token);
